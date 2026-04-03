@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog &mdash; Kasper Kærgaard Pedersen</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav>
+    <a href="../index.html" class="nav-name">KKP</a>
+    <ul>
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="index.html" class="active">Blog</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section id="blog-list">
+    <div class="container">
+      <h2 class="section-title">Blog</h2>
+      <p class="section-sub">Writing on ML, data, and things I'm building</p>
+      <div id="posts-container">
+        <p class="loading">Loading posts&hellip;</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>Built from scratch &middot; Kasper Kærgaard Pedersen &middot; 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    async function loadPosts() {
+      const container = document.getElementById('posts-container');
+      try {
+        const res = await fetch('posts/index.json');
+        const posts = await res.json();
+
+        if (posts.length === 0) {
+          container.innerHTML = '<p class="loading">No posts yet.</p>';
+          return;
+        }
+
+        // Sort newest first
+        posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        container.innerHTML = posts.map((post) => `
+          <a href="post.html?slug=${post.slug}" class="post-row">
+            <div class="post-meta">
+              <time>${formatDate(post.date)}</time>
+            </div>
+            <div class="post-info">
+              <h3>${post.title}</h3>
+              <p>${post.description}</p>
+            </div>
+            <svg class="post-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        `).join('');
+      } catch (e) {
+        container.innerHTML = '<p class="loading">Failed to load posts.</p>';
+      }
+    }
+
+    function formatDate(str) {
+      return new Date(str).toLocaleDateString('en-GB', {
+        year: 'numeric', month: 'short', day: 'numeric'
+      });
+    }
+
+    loadPosts();
+  </script>
+</body>
+</html>

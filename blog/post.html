@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post &mdash; Kasper Kærgaard Pedersen</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- Syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+</head>
+<body>
+  <nav>
+    <a href="../index.html" class="nav-name">KKP</a>
+    <ul>
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="index.html" class="active">Blog</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div class="post-back-wrap">
+      <a href="index.html" class="post-back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        All posts
+      </a>
+    </div>
+    <article id="post-content" class="prose">
+      <p class="loading">Loading&hellip;</p>
+    </article>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>Built from scratch &middot; Kasper Kærgaard Pedersen &middot; 2026</p>
+    </div>
+  </footer>
+
+  <!-- marked.js for Markdown rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
+  <!-- highlight.js for code blocks -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <script>
+    async function loadPost() {
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('slug');
+      const container = document.getElementById('post-content');
+
+      if (!slug) {
+        container.innerHTML = '<p>No post specified.</p>';
+        return;
+      }
+
+      try {
+        // Load post metadata for the date
+        const metaRes = await fetch('posts/index.json');
+        const posts = await metaRes.json();
+        const meta = posts.find((p) => p.slug === slug);
+
+        // Load markdown content
+        const mdRes = await fetch(`posts/${slug}.md`);
+        if (!mdRes.ok) throw new Error('Not found');
+        const md = await mdRes.text();
+
+        // Configure marked with highlight.js
+        marked.setOptions({
+          highlight: (code, lang) => {
+            if (lang && hljs.getLanguage(lang)) {
+              return hljs.highlight(code, { language: lang }).value;
+            }
+            return hljs.highlightAuto(code).value;
+          }
+        });
+
+        const html = marked.parse(md);
+
+        const dateStr = meta
+          ? `<time class="post-date">${new Date(meta.date).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</time>`
+          : '';
+
+        container.innerHTML = dateStr + html;
+
+        // Update page title
+        const h1 = container.querySelector('h1');
+        if (h1) document.title = `${h1.textContent} — Kasper Kærgaard Pedersen`;
+
+        // Run highlight.js on any code blocks marked didn't catch
+        document.querySelectorAll('pre code').forEach((el) => hljs.highlightElement(el));
+
+      } catch (e) {
+        container.innerHTML = '<p>Post not found.</p>';
+      }
+    }
+
+    loadPost();
+  </script>
+</body>
+</html>
