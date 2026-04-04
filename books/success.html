@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Purchase Successful &mdash; Kasper Kærgaard Pedersen</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav>
+    <a href="../index.html" class="nav-name">KKP</a>
+    <ul>
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="../blog/index.html">Blog</a></li>
+      <li><a href="index.html" class="active">Books</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section class="section" style="min-height: 80vh; display: flex; align-items: center; justify-content: center;">
+    <div style="text-align: center; max-width: 520px;">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" style="margin-bottom: 1.5rem;">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      <h1 style="margin-bottom: 0.5rem;">Thank you for your purchase!</h1>
+      <p class="text-secondary" style="margin-bottom: 2rem;" id="success-message">
+        You now have full access to all chapters. Enjoy reading!
+      </p>
+      <a href="#" class="btn btn-primary" id="continue-btn">Continue Reading</a>
+    </div>
+  </section>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const bookSlug = params.get('book') || 'how-computers-work';
+
+    // Grant full access
+    localStorage.setItem(`book_access_${bookSlug}`, 'true');
+
+    // Set continue link
+    document.getElementById('continue-btn').href = `reader.html?book=${bookSlug}`;
+  </script>
+</body>
+</html>

@@ -93,10 +93,21 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <!-- LemonSqueezy checkout overlay -->
+  <script src="https://app.lemonsqueezy.com/js/lemon.js" defer></script>
 
   <script>
     let bookData = null;
     let allChapters = []; // flat list of { slug, title, free, sectionIndex }
+
+    // --- Access control ---
+    function hasFullAccess(bookSlug) {
+      return localStorage.getItem(`book_access_${bookSlug}`) === 'true';
+    }
+
+    function isChapterUnlocked(chapterMeta, bookSlug) {
+      return chapterMeta.free || hasFullAccess(bookSlug);
+    }
 
     async function init() {
       const params = new URLSearchParams(window.location.search);
@@ -145,6 +156,7 @@
 
     function buildTOC(bookSlug, activeChapter) {
       const toc = document.getElementById('sidebar-toc');
+      const purchased = hasFullAccess(bookSlug);
       let html = '';
 
       bookData.sections.forEach((section, si) => {
@@ -154,11 +166,12 @@
 
         section.chapters.forEach((ch, ci) => {
           const isActive = ch.slug === activeChapter;
-          const lockIcon = ch.free ? '' : `<svg class="toc-lock" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+          const unlocked = ch.free || purchased;
+          const lockIcon = unlocked ? '' : `<svg class="toc-lock" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
 
           html += `<li>
             <a href="reader.html?book=${bookSlug}&chapter=${ch.slug}" 
-               class="toc-link ${isActive ? 'toc-active' : ''} ${ch.free ? '' : 'toc-locked'}"
+               class="toc-link ${isActive ? 'toc-active' : ''} ${unlocked ? '' : 'toc-locked'}"
                data-slug="${ch.slug}">
               <span class="toc-chapter-title">${ch.title}</span>
               ${lockIcon}
@@ -175,7 +188,8 @@
     function showBookIntro() {
       const content = document.getElementById('chapter-content');
       const totalChapters = allChapters.length;
-      const freeCount = allChapters.filter(c => c.free).length;
+      const purchased = hasFullAccess(bookData.slug);
+      const freeCount = purchased ? totalChapters : allChapters.filter(c => c.free).length;
 
       content.innerHTML = `
         <div class="book-intro">
@@ -186,7 +200,8 @@
             <span class="book-meta-sep">&middot;</span>
             <span>${bookData.status}</span>
             <span class="book-meta-sep">&middot;</span>
-            <span>${totalChapters} chapters (${freeCount} free)</span>
+            <span>${totalChapters} chapters${purchased ? '' : ` (${freeCount} free)`}</span>
+            ${purchased ? '<span class="book-meta-sep">&middot;</span><span style="color: var(--accent);">Full Access</span>' : ''}
           </div>
           <p class="book-intro-desc">${bookData.description}</p>
           <div class="book-intro-cta">
@@ -198,14 +213,16 @@
               <div class="intro-toc-section">
                 <h3>${section.title}</h3>
                 <ol>
-                  ${section.chapters.map(ch => `
-                    <li class="${ch.free ? '' : 'intro-toc-locked'}">
+                  ${section.chapters.map(ch => {
+                    const unlocked = ch.free || purchased;
+                    return `
+                    <li class="${unlocked ? '' : 'intro-toc-locked'}">
                       <a href="reader.html?book=${bookData.slug}&chapter=${ch.slug}">
                         ${ch.title}
-                        ${ch.free ? '<span class="intro-toc-free">Free</span>' : '<span class="intro-toc-lock">Full Access</span>'}
+                        ${unlocked ? (ch.free ? '<span class="intro-toc-free">Free</span>' : '') : '<span class="intro-toc-lock">Full Access</span>'}
                       </a>
-                    </li>
-                  `).join('')}
+                    </li>`;
+                  }).join('')}
                 </ol>
               </div>
             `).join('')}
@@ -225,11 +242,19 @@
         return;
       }
 
-      // If locked, show paywall
-      if (!chapterMeta.free) {
+      // If locked (not free AND not purchased), show paywall
+      if (!isChapterUnlocked(chapterMeta, bookSlug)) {
         content.innerHTML = '';
         locked.style.display = 'flex';
         nav.style.display = 'none';
+
+        // Wire up buy button with LemonSqueezy checkout
+        const buyBtn = document.getElementById('buy-btn');
+        if (bookData.lemonSqueezyUrl) {
+          buyBtn.href = bookData.lemonSqueezyUrl;
+          buyBtn.classList.add('lemonsqueezy-button');
+        }
+
         updateChapterNav(chapterSlug);
         return;
       }
