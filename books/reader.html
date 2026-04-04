@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book &mdash; Kasper Kærgaard Pedersen</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+  <!-- KaTeX for math -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+</head>
+<body>
+  <nav>
+    <a href="../index.html" class="nav-name">KKP</a>
+    <ul>
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="../blog/index.html">Blog</a></li>
+      <li><a href="index.html" class="active">Books</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="reader-layout">
+    <!-- Sidebar -->
+    <aside class="reader-sidebar" id="reader-sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-back">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="19" y1="12" x2="5" y2="12"/>
+            <polyline points="12 19 5 12 12 5"/>
+          </svg>
+          All books
+        </a>
+        <h3 class="sidebar-title" id="sidebar-title">Loading&hellip;</h3>
+      </div>
+      <div class="sidebar-toc" id="sidebar-toc"></div>
+    </aside>
+
+    <!-- Mobile sidebar toggle -->
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle table of contents">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="15" y2="12"/>
+        <line x1="3" y1="18" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    <!-- Chapter content -->
+    <main class="reader-content">
+      <article id="chapter-content" class="prose">
+        <p class="loading">Loading&hellip;</p>
+      </article>
+
+      <!-- Locked chapter overlay -->
+      <div class="chapter-locked" id="chapter-locked" style="display: none;">
+        <div class="locked-inner">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <h3>This chapter requires full access</h3>
+          <p>You're reading the free preview. Get full access to all chapters, future updates, and support the author.</p>
+          <a href="#" class="btn btn-primary" id="buy-btn">Get Full Access</a>
+          <p class="locked-note">One-time purchase &middot; Lifetime updates</p>
+        </div>
+      </div>
+
+      <!-- Chapter navigation -->
+      <div class="chapter-nav" id="chapter-nav" style="display: none;">
+        <a href="#" class="chapter-nav-btn" id="prev-chapter">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="19" y1="12" x2="5" y2="12"/>
+            <polyline points="12 19 5 12 12 5"/>
+          </svg>
+          <span id="prev-chapter-title">Previous</span>
+        </a>
+        <a href="#" class="chapter-nav-btn" id="next-chapter">
+          <span id="next-chapter-title">Next</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+  <script>
+    let bookData = null;
+    let allChapters = []; // flat list of { slug, title, free, sectionIndex }
+
+    async function init() {
+      const params = new URLSearchParams(window.location.search);
+      const bookSlug = params.get('book');
+      const chapterSlug = params.get('chapter');
+
+      if (!bookSlug) {
+        document.getElementById('chapter-content').innerHTML = '<p>No book specified.</p>';
+        return;
+      }
+
+      try {
+        const res = await fetch('books.json');
+        const books = await res.json();
+        bookData = books.find(b => b.slug === bookSlug);
+
+        if (!bookData) {
+          document.getElementById('chapter-content').innerHTML = '<p>Book not found.</p>';
+          return;
+        }
+
+        document.title = `${bookData.title} — Kasper Kærgaard Pedersen`;
+        document.getElementById('sidebar-title').textContent = bookData.title;
+
+        // Build flat chapter list
+        bookData.sections.forEach((section, si) => {
+          section.chapters.forEach(ch => {
+            allChapters.push({ ...ch, sectionIndex: si });
+          });
+        });
+
+        // Build TOC
+        buildTOC(bookSlug, chapterSlug);
+
+        // Load chapter or show intro
+        if (chapterSlug) {
+          loadChapter(bookSlug, chapterSlug);
+        } else {
+          showBookIntro();
+        }
+
+      } catch (e) {
+        document.getElementById('chapter-content').innerHTML = '<p>Failed to load book.</p>';
+      }
+    }
+
+    function buildTOC(bookSlug, activeChapter) {
+      const toc = document.getElementById('sidebar-toc');
+      let html = '';
+
+      bookData.sections.forEach((section, si) => {
+        html += `<div class="toc-section">
+          <h4 class="toc-section-title">${section.title}</h4>
+          <ul class="toc-chapters">`;
+
+        section.chapters.forEach((ch, ci) => {
+          const isActive = ch.slug === activeChapter;
+          const lockIcon = ch.free ? '' : `<svg class="toc-lock" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+
+          html += `<li>
+            <a href="reader.html?book=${bookSlug}&chapter=${ch.slug}" 
+               class="toc-link ${isActive ? 'toc-active' : ''} ${ch.free ? '' : 'toc-locked'}"
+               data-slug="${ch.slug}">
+              <span class="toc-chapter-title">${ch.title}</span>
+              ${lockIcon}
+            </a>
+          </li>`;
+        });
+
+        html += `</ul></div>`;
+      });
+
+      toc.innerHTML = html;
+    }
+
+    function showBookIntro() {
+      const content = document.getElementById('chapter-content');
+      const totalChapters = allChapters.length;
+      const freeCount = allChapters.filter(c => c.free).length;
+
+      content.innerHTML = `
+        <div class="book-intro">
+          <h1>${bookData.title}</h1>
+          <p class="book-intro-subtitle">${bookData.subtitle}</p>
+          <div class="book-intro-meta">
+            <span>By ${bookData.author}</span>
+            <span class="book-meta-sep">&middot;</span>
+            <span>${bookData.status}</span>
+            <span class="book-meta-sep">&middot;</span>
+            <span>${totalChapters} chapters (${freeCount} free)</span>
+          </div>
+          <p class="book-intro-desc">${bookData.description}</p>
+          <div class="book-intro-cta">
+            <a href="reader.html?book=${bookData.slug}&chapter=${allChapters[0].slug}" class="btn btn-primary">Start Reading</a>
+          </div>
+          <div class="book-intro-sections">
+            <h2>Table of Contents</h2>
+            ${bookData.sections.map(section => `
+              <div class="intro-toc-section">
+                <h3>${section.title}</h3>
+                <ol>
+                  ${section.chapters.map(ch => `
+                    <li class="${ch.free ? '' : 'intro-toc-locked'}">
+                      <a href="reader.html?book=${bookData.slug}&chapter=${ch.slug}">
+                        ${ch.title}
+                        ${ch.free ? '<span class="intro-toc-free">Free</span>' : '<span class="intro-toc-lock">Full Access</span>'}
+                      </a>
+                    </li>
+                  `).join('')}
+                </ol>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadChapter(bookSlug, chapterSlug) {
+      const content = document.getElementById('chapter-content');
+      const locked = document.getElementById('chapter-locked');
+      const nav = document.getElementById('chapter-nav');
+
+      const chapterMeta = allChapters.find(c => c.slug === chapterSlug);
+      if (!chapterMeta) {
+        content.innerHTML = '<p>Chapter not found.</p>';
+        return;
+      }
+
+      // If locked, show paywall
+      if (!chapterMeta.free) {
+        content.innerHTML = '';
+        locked.style.display = 'flex';
+        nav.style.display = 'none';
+        updateChapterNav(chapterSlug);
+        return;
+      }
+
+      locked.style.display = 'none';
+
+      try {
+        const mdRes = await fetch(`${bookSlug}/${chapterSlug}.md`);
+        if (!mdRes.ok) throw new Error('Not found');
+        const md = await mdRes.text();
+
+        // Strip Obsidian-style metadata/frontmatter
+        const cleanedMd = md
+          .replace(/^---[\s\S]*?---\n*/m, '')
+          .replace(/%%[\s\S]*?%%/g, '')           // Obsidian comments
+          .replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, '$2')  // [[link|display]]
+          .replace(/\[\[([^\]]+)\]\]/g, '$1');      // [[wiki links]]
+
+        marked.setOptions({
+          highlight: (code, lang) => {
+            if (lang && hljs.getLanguage(lang)) {
+              return hljs.highlight(code, { language: lang }).value;
+            }
+            return hljs.highlightAuto(code).value;
+          }
+        });
+
+        let html = marked.parse(cleanedMd);
+
+        // Render KaTeX: block math $$...$$ and inline $...$
+        html = html.replace(/\$\$([\s\S]*?)\$\$/g, (_, tex) => {
+          try { return katex.renderToString(tex.trim(), { displayMode: true }); }
+          catch (e) { return `<code>${tex}</code>`; }
+        });
+        html = html.replace(/\$([^\$\n]+?)\$/g, (_, tex) => {
+          try { return katex.renderToString(tex.trim(), { displayMode: false }); }
+          catch (e) { return `<code>${tex}</code>`; }
+        });
+
+        content.innerHTML = html;
+
+        // Highlight code blocks
+        document.querySelectorAll('#chapter-content pre code').forEach(el => hljs.highlightElement(el));
+
+        // Show chapter nav
+        nav.style.display = 'flex';
+        updateChapterNav(chapterSlug);
+
+        // Scroll to top
+        window.scrollTo(0, 0);
+
+      } catch (e) {
+        content.innerHTML = '<p>Chapter content not found. It may not have been published yet.</p>';
+        nav.style.display = 'flex';
+        updateChapterNav(chapterSlug);
+      }
+    }
+
+    function updateChapterNav(currentSlug) {
+      const idx = allChapters.findIndex(c => c.slug === currentSlug);
+      const prev = idx > 0 ? allChapters[idx - 1] : null;
+      const next = idx < allChapters.length - 1 ? allChapters[idx + 1] : null;
+      const nav = document.getElementById('chapter-nav');
+
+      const prevBtn = document.getElementById('prev-chapter');
+      const nextBtn = document.getElementById('next-chapter');
+
+      if (prev) {
+        prevBtn.href = `reader.html?book=${bookData.slug}&chapter=${prev.slug}`;
+        document.getElementById('prev-chapter-title').textContent = prev.title;
+        prevBtn.style.visibility = 'visible';
+      } else {
+        prevBtn.style.visibility = 'hidden';
+      }
+
+      if (next) {
+        nextBtn.href = `reader.html?book=${bookData.slug}&chapter=${next.slug}`;
+        document.getElementById('next-chapter-title').textContent = next.title;
+        nextBtn.style.visibility = 'visible';
+      } else {
+        nextBtn.style.visibility = 'hidden';
+      }
+
+      nav.style.display = 'flex';
+    }
+
+    // Mobile sidebar toggle
+    document.getElementById('sidebar-toggle').addEventListener('click', () => {
+      document.getElementById('reader-sidebar').classList.toggle('sidebar-open');
+    });
+
+    // Close sidebar when clicking a link on mobile
+    document.getElementById('sidebar-toc').addEventListener('click', (e) => {
+      if (e.target.closest('.toc-link')) {
+        document.getElementById('reader-sidebar').classList.remove('sidebar-open');
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>

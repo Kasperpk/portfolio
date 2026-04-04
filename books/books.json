@@ -1,0 +1,71 @@
+[
+  {
+    "slug": "how-computers-work",
+    "title": "How Computers Work",
+    "subtitle": "From Transistors to Operating Systems",
+    "description": "A bottom-up journey through modern computing — covering digital logic, binary arithmetic, machine language, computer architecture, compilers, and operating systems. Built from first principles with hand-drawn diagrams and practical examples.",
+    "author": "Kasper Kærgaard Pedersen",
+    "status": "In Progress",
+    "lastUpdated": "2026-04-04",
+    "coverColor": "#6c8fff",
+    "tags": ["Computer Science", "Hardware", "Architecture", "Compilers"],
+    "sections": [
+      {
+        "title": "Introduction to Computer Science",
+        "chapters": [
+          { "slug": "00-introduction-to-computer-science", "title": "Introduction to Computer Science", "free": true },
+          { "slug": "01-historical-perspective", "title": "Historical Perspective on Computation", "free": true },
+          { "slug": "02-theoretical-computer-science", "title": "Theoretical Computer Science", "free": true }
+        ]
+      },
+      {
+        "title": "Computer Engineering & Architecture",
+        "chapters": [
+          { "slug": "01-elements-of-modern-computing", "title": "Elements of Modern Computing Systems", "free": true },
+          { "slug": "02-boolean-logic", "title": "Boolean Logic and Digital Building Blocks", "free": true },
+          { "slug": "03-physics-of-computing", "title": "Physics and Evolution of Electronic Computing", "free": false },
+          { "slug": "04-binary-numbers-and-adders", "title": "The Binary Number System and Adders", "free": false },
+          { "slug": "05-chips-that-memorize", "title": "Chips That Memorize", "free": false },
+          { "slug": "06-speaking-machine-language", "title": "Speaking Machine Language", "free": false },
+          { "slug": "07-computer-architecture", "title": "Computer Architecture", "free": false },
+          { "slug": "08-assembling-and-compiling", "title": "Assembling and Compiling", "free": false },
+          { "slug": "09-hands-on-part-1", "title": "Hands-On Computer Science Part 1", "free": false },
+          { "slug": "10-lexical-analysis", "title": "Lexical Analysis or Scanning", "free": false },
+          { "slug": "11-linking", "title": "Linking", "free": false },
+          { "slug": "12-parsing", "title": "Parsing", "free": false },
+          { "slug": "13-operating-systems", "title": "Operating Systems", "free": false },
+          { "slug": "14-more-fun-to-go", "title": "More Fun to Go", "free": false },
+          { "slug": "15-hands-on-part-2", "title": "Hands-On Computer Science Part 2", "free": false }
+        ]
+      },
+      {
+        "title": "Data Structures & Algorithms",
+        "chapters": [
+          { "slug": "ds-arrays", "title": "Arrays", "free": false },
+          { "slug": "ds-linked-lists", "title": "Linked Lists", "free": false },
+          { "slug": "ds-queues", "title": "Queues", "free": false },
+          { "slug": "ds-trees", "title": "Trees", "free": false },
+          { "slug": "ds-binary-search-trees", "title": "Binary Search Trees", "free": false },
+          { "slug": "ds-graphs", "title": "Graphs", "free": false },
+          { "slug": "ds-hash-tables", "title": "Hash Tables", "free": false },
+          { "slug": "alg-01-why-study-algorithms", "title": "Why Study Algorithms", "free": false },
+          { "slug": "alg-02-approaching-challenges", "title": "Approaching Programming Challenges", "free": false },
+          { "slug": "alg-03-evaluating-performance", "title": "Evaluation of Algorithmic Performance", "free": false },
+          { "slug": "alg-04-introducing-algorithms", "title": "Introducing Algorithms", "free": false },
+          { "slug": "alg-05-algorithmic-designs", "title": "Algorithmic Designs", "free": false },
+          { "slug": "alg-06-divide-and-conquer", "title": "Divide and Conquer", "free": false },
+          { "slug": "alg-07-dynamic-programming", "title": "Dynamic Programming", "free": false },
+          { "slug": "alg-08-graph-algorithms", "title": "Graph Algorithms", "free": false }
+        ]
+      },
+      {
+        "title": "Applied Computer Science",
+        "chapters": [
+          { "slug": "applied-algorithmic-thinking", "title": "Applying Algorithmic Thinking", "free": false },
+          { "slug": "applied-ai", "title": "Artificial Intelligence", "free": false },
+          { "slug": "applied-learning-to-program", "title": "Learning How to Program", "free": false }
+        ]
+      }
+    ]
+  }
+]
