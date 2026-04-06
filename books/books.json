@@ -6,7 +6,7 @@
     "description": "A bottom-up journey through modern computing — covering digital logic, binary arithmetic, machine language, computer architecture, compilers, and operating systems. Built from first principles with hand-drawn diagrams and practical examples.",
     "author": "Kasper Kærgaard Pedersen",
     "status": "In Progress",
-    "lastUpdated": "2026-04-04",
+    "lastUpdated": "2026-04-06",
     "coverColor": "#6c8fff",
     "tags": ["Computer Science", "Hardware", "Architecture", "Compilers"],
     "lemonSqueezyUrl": "https://kasperbooks.lemonsqueezy.com/checkout/buy/f8663c34-4366-467b-b20e-f9d6818b057e",
@@ -29,14 +29,11 @@
           { "slug": "05-chips-that-memorize", "title": "Chips That Memorize", "free": false },
           { "slug": "06-speaking-machine-language", "title": "Speaking Machine Language", "free": false },
           { "slug": "07-computer-architecture", "title": "Computer Architecture", "free": false },
-          { "slug": "08-assembling-and-compiling", "title": "Assembling and Compiling", "free": false },
+          { "slug": "08-assembling-compiling-and-linking", "title": "Assembling, Compiling, and Linking", "free": false },
           { "slug": "09-hands-on-part-1", "title": "Hands-On Computer Science Part 1", "free": false },
-          { "slug": "10-lexical-analysis", "title": "Lexical Analysis or Scanning", "free": false },
-          { "slug": "11-linking", "title": "Linking", "free": false },
-          { "slug": "12-parsing", "title": "Parsing", "free": false },
-          { "slug": "13-operating-systems", "title": "Operating Systems", "free": false },
-          { "slug": "14-more-fun-to-go", "title": "More Fun to Go", "free": false },
-          { "slug": "15-hands-on-part-2", "title": "Hands-On Computer Science Part 2", "free": false }
+          { "slug": "10-operating-systems", "title": "Operating Systems", "free": false },
+          { "slug": "11-more-fun-to-go", "title": "More Fun to Go", "free": false },
+          { "slug": "12-hands-on-part-2", "title": "Hands-On Computer Science Part 2", "free": false }
         ]
       },
       {
