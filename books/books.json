@@ -1,5 +1,60 @@
 [
   {
+    "slug": "building-knowledge-data-factories",
+    "title": "Building Knowledge and Data-Centric Factories",
+    "subtitle": "From Decision Theory to Enterprise Data Platforms",
+    "description": "A comprehensive guide to understanding why data creates value and how to build the systems that turn raw data into productive assets. Covers decision theory, systems thinking, data management, dimensional modeling, and a full walk-through of an enterprise data platform built on Microsoft Fabric.",
+    "author": "Kasper Kærgaard Pedersen",
+    "status": "In Progress",
+    "lastUpdated": "2026-04-08",
+    "coverColor": "#4a9e6f",
+    "tags": ["Data Engineering", "Data Management", "Analytics", "Microsoft Fabric"],
+    "lemonSqueezyUrl": "",
+    "sections": [
+      {
+        "title": "The Value Proposition of Data",
+        "chapters": [
+          { "slug": "introduction", "title": "Introduction to Decision Support Systems", "free": true },
+          { "slug": "case-studies-of-data-success", "title": "Case Studies of Data Success", "free": true },
+          { "slug": "decision-support", "title": "Decision Support", "free": true },
+          { "slug": "the-role-of-information-in-a-system", "title": "The Role of Information in a System", "free": true },
+          { "slug": "summary-part-1", "title": "Summary", "free": true }
+        ]
+      },
+      {
+        "title": "Unlocking the Value Proposition of Data",
+        "chapters": [
+          { "slug": "becoming-data-literate", "title": "Becoming Data Literate", "free": true }
+        ]
+      },
+      {
+        "title": "Running and Managing Businesses with Data",
+        "chapters": [
+          { "slug": "business-systems-and-data-driven-operating-model", "title": "The Business Systems and the Data-Driven Operating Model", "free": false },
+          { "slug": "finding-requirements-and-use-cases", "title": "Finding Requirements and Use Cases", "free": false },
+          { "slug": "a-word-on-data-management", "title": "A Word on Data Management", "free": false },
+          { "slug": "data-cultures-and-organizational-empowerment", "title": "Data Cultures and Organizational Empowerment", "free": false }
+        ]
+      },
+      {
+        "title": "Manufacturing Knowledge and Data-Centric Products",
+        "chapters": [
+          { "slug": "data-lifecycles", "title": "Data Lifecycles", "free": false },
+          { "slug": "from-lifecycles-to-factories", "title": "From Lifecycles to Factories", "free": false },
+          { "slug": "manufacturing-knowledge-and-data-products", "title": "Manufacturing Knowledge and Data-Centered Products", "free": false }
+        ]
+      },
+      {
+        "title": "What to Do Now",
+        "chapters": [
+          { "slug": "more-data-success-stories", "title": "More Data Success Stories", "free": false },
+          { "slug": "time-to-practice", "title": "Time to Practice and Gain Technical Knowledge", "free": false },
+          { "slug": "conclusions", "title": "Conclusions", "free": false }
+        ]
+      }
+    ]
+  },
+  {
     "slug": "how-computers-work",
     "title": "How Computers Work",
     "subtitle": "From Transistors to Operating Systems",
