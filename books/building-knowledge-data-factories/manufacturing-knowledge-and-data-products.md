@@ -898,7 +898,27 @@ code example 3.20: Pipeline orchestration definition (simplified)
 }
 ```
 
-In tools like Microsoft Fabric Data Factory or Azure Data Factory this JSON translates to a visual pipeline where you can see the dependency chain, monitor run history and set up scheduled triggers. Screenshot placeholder: *[insert screenshot of Data Factory pipeline view with workspace identifiers blurred]*.
+In tools like Microsoft Fabric Data Factory or Azure Data Factory this JSON translates to a visual pipeline where you can see the dependency chain, monitor run history and set up scheduled triggers. I created a pipeline called *full_orchestration* which invokes three children pipelines. Figure 3.9 shows the full orchestration pipeline which chains the three medallion layers sequentially.
+
+![Full orchestration pipeline](full-orchestration-pipeline.png)
+Figure 3.9 Full orchestration pipeline chaining Bronze, Silver and Gold layers
+
+Opening the bronze pipeline reveals that there are three different APIs that is ingested into the data platform with the framework used above. Figure 3.10 shows the bronze sub-pipeline.
+
+![Bronze pipeline](bronze-pipeline.png)
+Figure 3.10 Bronze pipeline invoking three API ingestion pipelines
+
+After that run completes, the silver pipeline is invoked which runs a loop over all the tables having been defined in a dedicated silver metadata notebook. Figure 3.11 shows the silver pipeline with its metadata lookup and ForEach loop.
+
+![Silver pipeline](silver-pipeline.png)
+Figure 3.11 Silver pipeline with metadata-driven ForEach loop
+
+Finally we have the gold pipeline that runs dimensions first to generate surrogate keys and on completion the fact tables are created. Figure 3.12 shows the gold pipeline.
+
+![Gold pipeline](gold-pipeline.png)
+Figure 3.12 Gold pipeline loading dimensions before facts
+
+This is how data pipelines might be orchestrated and designed in a enterprise level environment.
 
 ### Semantic models and serving finished goods
 The star schema in the Gold layer feeds Power BI semantic models. These models define relationships between facts and dimensions, and contain DAX measures that calculate business KPIs. The dimensional model we built in code becomes directly queryable through visualizations.
@@ -946,7 +966,10 @@ Income Statement Amount =
         "EBITDA", EBITDA)
 ```
 
-Similarly a sales report model might define year-over-year comparisons and month-to-date calculations using time intelligence functions. These DAX measures are the final layer of transformation turning the star schema into the specific KPIs and views that business users consume. Screenshot placeholder: *[insert screenshot of Power BI report with financial values blurred]*.
+Similarly a sales report model might define year-over-year comparisons and month-to-date calculations using time intelligence functions. These DAX measures are the final layer of transformation turning the star schema into the specific KPIs and views that business users consume. Figure 3.13 shows a customer analytics dashboard built on a dimensional model. The report segments customers by spend tier and order frequency and visualizes revenue distribution and average order value — the kind of insight that becomes possible once data flows through the full lifecycle from ingestion to a well-modeled star schema.
+
+![Customer analytics dashboard](customer-analytics-dashboard.png)
+Figure 3.13 Customer analytics dashboard showing spend tiers, order frequency, revenue distribution and average order value
 
 ### What this platform demonstrates
 Walking through this platform end to end, we can see the same lifecycle that began with a local SQLite database and a weather API in the earlier sections. The difference is not in the logic but in the infrastructure and engineering practices that surround it.
