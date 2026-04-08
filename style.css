@@ -823,6 +823,38 @@ footer p {
   margin: 1.5rem 0;
 }
 
+.prose .obsidian-embed {
+  margin: 1.5rem 0;
+  padding: 1rem 1.1rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-card);
+}
+
+.prose .obsidian-embed img {
+  margin: 0 0 0.75rem;
+}
+
+.prose .obsidian-embed-label {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.prose .obsidian-embed figcaption {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.prose .obsidian-embed.is-missing {
+  border-style: solid;
+}
+
 /* Locked chapter overlay */
 .chapter-locked {
   display: flex;

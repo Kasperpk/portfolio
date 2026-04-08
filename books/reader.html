@@ -97,6 +97,110 @@
   <script>
     let bookData = null;
     let allChapters = []; // flat list of { slug, title, free, sectionIndex }
+    const legacyChapterRedirects = {
+      '08-assembling-and-compiling': '08-assembling-compiling-and-linking',
+      '10-lexical-analysis': '08-assembling-compiling-and-linking',
+      '11-linking': '08-assembling-compiling-and-linking',
+      '12-parsing': '08-assembling-compiling-and-linking',
+      '13-operating-systems': '10-operating-systems',
+      '14-more-fun-to-go': '11-more-fun-to-go',
+      '15-hands-on-part-2': '12-hands-on-part-2'
+    };
+
+    function resolveChapterSlug(chapterSlug) {
+      return legacyChapterRedirects[chapterSlug] || chapterSlug;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function prettifyReferenceLabel(value) {
+      return String(value ?? '')
+        .replace(/\.[a-z0-9]+$/i, '')
+        .split('/')
+        .pop()
+        .replace(/[-_]/g, ' ')
+        .trim();
+    }
+
+    function renderEmbeddedReference(target, alias, bookSlug) {
+      const cleanTarget = target.trim();
+      const displayLabel = prettifyReferenceLabel(alias || cleanTarget);
+      const fileName = decodeURIComponent(cleanTarget.split('/').pop().trim());
+      const hasImageExtension = /\.(png|jpe?g|gif|webp|svg)$/i.test(fileName);
+
+      if (hasImageExtension) {
+        const src = `${bookSlug}/assets/${encodeURIComponent(fileName)}`;
+        return `
+          <figure class="obsidian-embed obsidian-asset">
+            <div class="obsidian-embed-label">Embedded figure</div>
+            <img src="${src}" alt="${escapeHtml(displayLabel)}" loading="lazy" onerror="this.closest('figure').classList.add('is-missing'); this.remove();" />
+            <figcaption>${escapeHtml(displayLabel)}</figcaption>
+          </figure>
+        `;
+      }
+
+      return `
+        <figure class="obsidian-embed obsidian-asset is-pending" data-asset-base="${escapeHtml(fileName)}" data-book="${escapeHtml(bookSlug)}">
+          <div class="obsidian-embed-label">Embedded reference</div>
+          <img alt="${escapeHtml(displayLabel)}" loading="lazy" />
+          <figcaption>${escapeHtml(displayLabel)}</figcaption>
+        </figure>
+      `;
+    }
+
+    function normalizeObsidianMarkdown(md, bookSlug) {
+      return md
+        .replace(/^---[\s\S]*?---\n*/m, '')
+        .replace(/%%[\s\S]*?%%/g, '')
+        .replace(/!\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, target, alias) => renderEmbeddedReference(target, alias, bookSlug))
+        .replace(/!\[([^\]]*)\]\((?!https?:|data:|\/)([^)]+)\)/g, (_, alt, src) => {
+          const cleanSrc = decodeURIComponent(src.trim().replace(/^\.?\//, ''));
+          const fileName = cleanSrc.split('/').pop();
+          return `![${alt}](${bookSlug}/assets/${encodeURIComponent(fileName)})`;
+        })
+        .replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, '$2')
+        .replace(/\[\[([^\]]+)\]\]/g, '$1')
+        .trim();
+    }
+
+    function hydrateEmbeddedAssets(root, bookSlug) {
+      const extensions = ['png', 'jpg', 'jpeg', 'webp', 'gif', 'svg'];
+
+      root.querySelectorAll('.obsidian-asset.is-pending').forEach((figure) => {
+        const img = figure.querySelector('img');
+        const baseName = (figure.dataset.assetBase || '').replace(/\.[a-z0-9]+$/i, '');
+
+        if (!img || !baseName) {
+          figure.classList.add('is-missing');
+          return;
+        }
+
+        let index = 0;
+        const tryNext = () => {
+          if (index >= extensions.length) {
+            figure.classList.add('is-missing');
+            img.remove();
+            return;
+          }
+
+          const nextSrc = `${bookSlug}/assets/${encodeURIComponent(baseName)}.${extensions[index++]}`;
+          img.onload = () => {
+            figure.classList.remove('is-pending');
+          };
+          img.onerror = tryNext;
+          img.src = nextSrc;
+        };
+
+        tryNext();
+      });
+    }
 
     // --- Access control ---
     function hasFullAccess(bookSlug) {
@@ -110,7 +214,16 @@
     async function init() {
       const params = new URLSearchParams(window.location.search);
       const bookSlug = params.get('book');
-      const chapterSlug = params.get('chapter');
+      let chapterSlug = params.get('chapter');
+
+      if (chapterSlug) {
+        const resolvedChapterSlug = resolveChapterSlug(chapterSlug);
+        if (resolvedChapterSlug !== chapterSlug) {
+          params.set('chapter', resolvedChapterSlug);
+          window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
+          chapterSlug = resolvedChapterSlug;
+        }
+      }
 
       if (!bookSlug) {
         document.getElementById('chapter-content').innerHTML = '<p>No book specified.</p>';
@@ -262,13 +375,11 @@
         const mdRes = await fetch(`${bookSlug}/${chapterSlug}.md`);
         if (!mdRes.ok) throw new Error('Not found');
         const md = await mdRes.text();
+        const cleanedMd = normalizeObsidianMarkdown(md, bookSlug);
 
-        // Strip Obsidian-style metadata/frontmatter
-        const cleanedMd = md
-          .replace(/^---[\s\S]*?---\n*/m, '')
-          .replace(/%%[\s\S]*?%%/g, '')           // Obsidian comments
-          .replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, '$2')  // [[link|display]]
-          .replace(/\[\[([^\]]+)\]\]/g, '$1');      // [[wiki links]]
+        if (!cleanedMd.trim()) {
+          throw new Error('Empty chapter');
+        }
 
         marked.setOptions({
           highlight: (code, lang) => {
@@ -292,6 +403,7 @@
         });
 
         content.innerHTML = html;
+        hydrateEmbeddedAssets(content, bookSlug);
 
         // Highlight code blocks
         document.querySelectorAll('#chapter-content pre code').forEach(el => hljs.highlightElement(el));
@@ -304,7 +416,15 @@
         window.scrollTo(0, 0);
 
       } catch (e) {
-        content.innerHTML = '<p>Chapter content not found. It may not have been published yet.</p>';
+        const isEmptyChapter = e?.message === 'Empty chapter';
+        content.innerHTML = isEmptyChapter
+          ? `
+            <div class="book-intro">
+              <h1>${chapterMeta.title}</h1>
+              <p class="book-intro-desc">This chapter is still being polished in the manuscript and will appear here soon.</p>
+            </div>
+          `
+          : '<p>Chapter content not found. It may not have been published yet.</p>';
         nav.style.display = 'flex';
         updateChapterNav(chapterSlug);
       }
