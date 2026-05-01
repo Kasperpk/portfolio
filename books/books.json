@@ -6,7 +6,7 @@
     "description": "A comprehensive guide to understanding why data creates value and how to build the systems that turn raw data into productive assets. Covers decision theory, systems thinking, data management, dimensional modeling, and a full walk-through of an enterprise data platform built on Microsoft Fabric.",
     "author": "Kasper Kærgaard Pedersen",
     "status": "In Progress",
-    "lastUpdated": "2026-04-08",
+    "lastUpdated": "2026-05-01",
     "coverColor": "#4a9e6f",
     "tags": ["Data Engineering", "Data Management", "Analytics", "Microsoft Fabric"],
     "lemonSqueezyUrl": "https://kasperbooks.lemonsqueezy.com/checkout/buy/34409d36-2a7a-4a4c-ac6d-da5f41e3f423",
@@ -18,13 +18,8 @@
           { "slug": "case-studies-of-data-success", "title": "Case Studies of Data Success", "free": true },
           { "slug": "decision-support", "title": "Decision Support", "free": true },
           { "slug": "the-role-of-information-in-a-system", "title": "The Role of Information in a System", "free": true },
+          { "slug": "technological-advancement", "title": "Technological Advancement", "free": true },
           { "slug": "summary-part-1", "title": "Summary", "free": true }
-        ]
-      },
-      {
-        "title": "Unlocking the Value Proposition of Data",
-        "chapters": [
-          { "slug": "becoming-data-literate", "title": "Becoming Data Literate", "free": true }
         ]
       },
       {
@@ -47,6 +42,7 @@
       {
         "title": "What to Do Now",
         "chapters": [
+          { "slug": "becoming-data-literate", "title": "Becoming Data Literate", "free": false },
           { "slug": "more-data-success-stories", "title": "More Data Success Stories", "free": false },
           { "slug": "time-to-practice", "title": "Time to Practice and Gain Technical Knowledge", "free": false },
           { "slug": "conclusions", "title": "Conclusions", "free": false }

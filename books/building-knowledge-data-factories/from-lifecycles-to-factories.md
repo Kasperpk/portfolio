@@ -1,4 +1,4 @@
-﻿This book began with a simple question: _why_ all this urgency around data, analytics, and AI?
+This book began with a simple question: _why_ all this urgency around data, analytics, and AI?
 
 Decision theory gives us a clean answer. If high-quality information improves our understanding of the world, then acting on that information should increase the expected utility of our decisions. Better signals, better actions, better outcomes. 
 
@@ -12,7 +12,7 @@ The analogy holds.
 
 Manufacturers begin with raw materials—wood, iron, copper, fabric. These materials may come directly from nature or from upstream suppliers. On their own, they are not products. They must be shaped, combined, refined. Through design and process, they become furniture, wiring, clothing, machinery—objects that serve a purpose in someone’s life.
 
-![](Knowledge%20and%20data%20centric%20factory%20analogy.png)
+![[Knowledge and data centric factory analogy.png]]
 
 Data follows the same arc. Raw data—logs, transactions, sensor readings, clicks—is the iron ore of the digital economy. It is abundant, uneven, often impure. Left untouched, it has little value. Through integration, modeling, and transformation, it becomes something closer to a finished good: a forecast, a dashboard, a recommendation engine, a risk score. We call these **data products**, and the term is not accidental. They are built, not found. Manufacturing firms store goods at different stages of refinement: raw materials, work-in-progress, finished inventory. Modern data architectures mirror this logic. Whether we call it staging, bronze–silver–gold, or something else entirely, the structure reflects a familiar truth: value increases as raw inputs are shaped into usable artifacts.
 

@@ -1,11 +1,12 @@
-﻿## Building the data foundation 
+## Building the data foundation 
 Data sources are the oil fields, the water springs or raw materials depending on which analogy you prefer. There are increasingly many ways in which data is generated often referred to as the 3 V's of data which are volume, variety, velocity and sometimes a fourth veracity. These are used to describe the ways in which the data landscape has evolved over the years as the term big data has come along. To built the data foundation of an organization requires a serious data acquisition strategy which should be driven by a fifth "V" *value*, something that is ensures with a good requirements gathering strategy as discussed in previous sections. There are many considerations that companies face in building a data acquisition strategy and a key question that Anderson tries to answer in his chapter 3 on data collection is "how do we value a data source?" something that organizations seems to struggle with. There are some interesting economics about data, something which Bill Schmarzo is debating in his work. For example in the book *The the Economics of Data, Analytics, and Digital Transformation*. 
 
 In the beginning of this book i discussed in-depth the value proposition of data. The key insight from that discussion is that data has value proportional to how well it closes the gap between prior and complete information in a way that increases utility in excess of the cost of collecting the data. We also saw how giving systems access to information builds feedback loops which can improve the overall performance. Putting these lofty ideas in to practice organizations and data profesionals aim to unlock this value through data lifecycle and by practicing foundational activities. Driven by the fifth *v* data should be fit for purpose is because a good cook can only do so much with poor ingredients. 
 
 Having data fit for purpose creates demand to use language from economic theory where the concept of supply and demand describes how the price or value of any good in the market given by the intersection of supply and demand. When it comes to data goods there is a key difference where increases in supply of data do not necessarily reduce the price or value that the market will converge towards. Schmarzo calls it the economic multiplier effect something that Anderson also brings up and it's this idea of building an entire contextual view by puzzling pieces of data together. Schmarzo relies on this when creating his entity propensity models in his more recent work. When we are able to collect more data at increasingly granular levels it allows for ever more nuanced and situational awareness which we can reuse across multiple use-cases. This means data value increases with supply and a call for us to become more innovative and creative about how we can generate data, here Matthew Benham is a great inspiration. Figure 3.8 show some entities in the middle which may be customers, employees, athletes, stores, machines and so on and how we by collecting all things and connecting the dots can create rich context about these which can lead to more valuable analytics. 
 
-![](Connecting%20the%20dots%20with%20data%20and%20context.png)
+
+![[0 Building knowledge and data-centric factories/2 Running and managing businesses with data/Sketches/Connecting the dots with data and context]]
 Figure 3.8 connecting the dots with data collection in context
 
 A related theory is that of law of diminishing returns which describe how firms produce by combining inputs labor and capital until at some point adding an extra employee or piece of equipment no longer adds excess profits. Schmarzo proposes the idea that data can essentially shifts the production or economic value curve upwards by "doing more with less" which has been the general gains from technological advancement and innovation. This happens when data is "Increasing operational uptime while reducing maintenance costs while improving customer satisfaction while reducing carbon footprint and emissions while increasing employee job satisfaction." (p. 43-44).  Value of data sources therefore lies within it's quality and fit for purpose towards creating real business value and the more high quality data we have the greater the economic multiplier effet we gain.
@@ -213,6 +214,7 @@ Most organizational APIs require authentication. The most common mechanisms are 
 Not all data arrives through a live connection. A significant and often underestimated share of organizational data exists in flat files: CSVs emailed between departments, Excel workbooks maintained by individual analysts, extracts downloaded from systems that offer no API. Dismissing this as informal or low quality misses the point — in many organizations flat files carry security mappings, reference data, or enrichment tables that simply do not exist anywhere else. In this example we continue from where we left off in example one. We will export our extracted data to a CSV file — simulating a scenario where an analyst has taken a database extract and passed it on — and then re-ingest that file into a new DataFrame, as would happen if a downstream team received it.
 
 Code example 2.5: exporting a DataFrame to CSV and reading it back
+
 
 
 **Code example 2.6: reading an Excel file — the pattern is nearly identical**
@@ -528,7 +530,7 @@ nt   = DataTransformer()
 ```
 
 ### Bronze layer — metadata-driven API ingestion
-Earlier we saw the conceptual `Metadata` class. In production the metadata configuration is richer. Each API source is described as a dictionary containing authentication details, endpoint URLs, query parameters, pagination rules and incremental loading specifications. A default dictionary holds settings shared across all endpoints of the same source system and individual table configs extend it.
+Earlier we saw the conceptual `Metadata` class. In production the metadata configuration is richer. Each API source can be described as a dictionary containing authentication details, endpoint URLs, query parameters, pagination rules and incremental loading specifications. A default dictionary holds settings shared across all endpoints of the same source system and individual table configs extend it.
 
 code example 3.13: Production API metadata configuration (anonymized)
 ```python
@@ -918,7 +920,7 @@ Finally we have the gold pipeline that runs dimensions first to generate surroga
 ![Gold pipeline](gold-pipeline.png)
 Figure 3.12 Gold pipeline loading dimensions before facts
 
-This is how data pipelines might be orchestrated and designed in a enterprise level environment.
+This is how data pipelines might be orchestrated and designed in a enterprise level environment. 
 
 ### Semantic models and serving finished goods
 The star schema in the Gold layer feeds Power BI semantic models. These models define relationships between facts and dimensions, and contain DAX measures that calculate business KPIs. The dimensional model we built in code becomes directly queryable through visualizations.
@@ -1002,4 +1004,3 @@ To sum it up we might have the following check list questions whenever we stand 
 * How can we extend the analytical model with custom measures?
 
   
-
