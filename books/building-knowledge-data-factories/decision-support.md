@@ -13,7 +13,7 @@ The equation expresses the *expected utility of a decision* where
 
 The mathematics describe how rational agents choose the actions which they *expect* to have the highest *utility* — that is, the probability-weighted average of how good each outcome would be. This gives us some more formal definition of what we intuitively know about decisions, that people are making choices based on they information they have in the moment and what they believe will serve them best. 
 
-To show the calculations this formula produces, consider a simple example where you are offered $50, or alternatively a coin flip that pays $120 on tails and nothing on heads. That means we now have two alternatives or $x's$ to calculate the expected utility of in accordance with equation 1.1. It tells us to sum the product of probability that we land in the state and the payoff in that state. The first alternative is very simple, one state that we know with certainty and the payoff is therefore $50 in this alternative. 
+To show the calculations this formula produces, consider a simple example where you are offered $50$, or alternatively a coin flip that pays $120$ on tails and nothing on heads. That means we now have two alternatives or $x's$ to calculate the expected utility of in accordance with equation 1.1. It tells us to sum the product of probability that we land in the state and the payoff in that state. The first alternative is very simple, one state that we know with certainty and the payoff is therefore $50 in this alternative. 
 $$
 E(noflip) = 1 * 50 = 50
 $$
