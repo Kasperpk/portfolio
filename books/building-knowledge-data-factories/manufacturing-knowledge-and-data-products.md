@@ -322,7 +322,7 @@ df = read_table(‘users’)
 # Filter to only active users
 df = df["status"] == "active"
 # Map: create a full_name column
-df = df.withcolumn(‘full_name’, col(‘first_name’) + ‘ ‘ + col(‘last_name’)
+df = df.withcolumn(‘full_name’, col(‘first_name’) + ‘ ‘ + col(‘last_name’))
 ```
 This operation filters on a status field with the line (status == "active") and a mapping (concatenate first/last name). Most processing frameworks (Pandas, Spark, SQL) support these operations. In SQL expression language the WHERE clause can be used to filter a table. 
 
