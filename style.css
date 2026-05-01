@@ -177,6 +177,39 @@ nav ul a.active { color: var(--text); font-weight: 500; }
   margin-bottom: 2.5rem;
 }
 
+/* ── Approach (How I work) ───────────────────────────────── */
+.approach-prose {
+  max-width: 640px;
+}
+
+.approach-prose p {
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 1.85;
+  margin-bottom: 1.5rem;
+}
+
+.approach-prose a {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--accent-dim);
+  transition: text-decoration-color 0.2s;
+}
+
+.approach-prose a:hover {
+  text-decoration-color: var(--text-muted);
+}
+
+.approach-close {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--text) !important;
+  border-left: 2px solid var(--border);
+  padding-left: 1.25rem;
+  margin-top: 2rem !important;
+}
+
 /* ── Project Cards ────────────────────────────────────────── */
 .projects-grid {
   display: grid;

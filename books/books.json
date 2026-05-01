@@ -31,7 +31,7 @@
         "title": "Running and Managing Businesses with Data",
         "chapters": [
           { "slug": "business-systems-and-data-driven-operating-model", "title": "The Business Systems and the Data-Driven Operating Model", "free": false },
-          { "slug": "finding-requirements-and-use-cases", "title": "Finding Requirements and Use Cases", "free": false },
+          { "slug": "finding-requirements-and-use-cases", "title": "Finding Requirements and Use Cases", "free": true },
           { "slug": "a-word-on-data-management", "title": "A Word on Data Management", "free": false },
           { "slug": "data-cultures-and-organizational-empowerment", "title": "Data Cultures and Organizational Empowerment", "free": false }
         ]
