@@ -27,3 +27,5 @@ The notion of primary keys are still important to understand and can be used to 
 ![alt text](<DImensional cube of data.png>)
 
 The multidimensional cube above is a sketch that shows how this concept might be understood. 
+
+One of the things that data engineers typically introduce are something called *surrogate keys*. These are self-constructed keys that like a primary uniquely defines a row in a table. The reason for this is that a primary key could contain text and be a composite of multiple columns. It's important that joins are efficient when browsing the multidimensional cube and having integers makes the operation much faster. The surrogate key was designed exactly for this purpose, something which is unique to the demands of analytical operations. 
