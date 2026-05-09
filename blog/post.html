@@ -68,7 +68,8 @@
         const meta = posts.find((p) => p.slug === slug);
 
         // Load markdown content
-        const mdRes = await fetch(`posts/${slug}.md`);
+        const sourceFile = meta?.file || slug;
+        const mdRes = await fetch(`posts/${sourceFile}.md`);
         if (!mdRes.ok) throw new Error('Not found');
         const md = await mdRes.text();
 
@@ -82,7 +83,17 @@
           }
         });
 
-        const html = marked.parse(md);
+        const renderer = new marked.Renderer();
+        renderer.image = ({ href, title, text }) => {
+          const isAbsolute = /^(?:[a-z]+:)?\/\//i.test(href);
+          const src = isAbsolute || href.startsWith('posts/') || href.startsWith('/')
+            ? href
+            : `posts/${href}`;
+          const titleAttr = title ? ` title="${title}"` : '';
+          return `<img src="${src}" alt="${text}"${titleAttr}>`;
+        };
+
+        const html = marked.parse(md, { renderer });
 
         const dateStr = meta
           ? `<time class="post-date">${new Date(meta.date).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</time>`

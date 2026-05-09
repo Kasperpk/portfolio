@@ -1,5 +1,12 @@
 [
   {
+    "slug": "puzzles-for-data-engineers-part-1",
+    "title": "Puzzles for Data Engineers, Part 1",
+    "date": "2026-05-09",
+    "description": "Why ingestion strategy, medallion layers, and dimensional modeling are the first real puzzles in data engineering.",
+    "file": "Puzzles for data engineers"
+  },
+  {
     "slug": "hello-world",
     "title": "Hello World",
     "date": "2026-04-03",

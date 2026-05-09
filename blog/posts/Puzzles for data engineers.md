@@ -1,31 +1,65 @@
-# Puzzles for data engineers part 1
+# Puzzles for data engineers, part 1
 
-I've been working professionally as a data engineer for the past 3 years and before that i studied a business intelligence program. In my university program there was a class on data management, something i really couldn't appreciate fully until later when i landed my first professional job as a data engineer. This was actually the case for many of the subjects i studied. 
+I have worked professionally as a data engineer for the past three years. Before that, I studied business intelligence at university. One of the subjects in that program was data management, and it turned out to be one of those courses I only fully appreciated once I started working.
 
-In the data management course i was introduced to the concept of data modeling. We looked at the ER-diagrams which is short for entity-relationship diagrams where we studied *normal forms*, *cardinality* and *keys* such as primary and foreign keys. These concepts are highly related to designing applications where data plays some role. That could be an application for bike rentals, food delivery or sports leagues. In all of these types of applications there is data. Each bike is recorded so that the application interface can show it's available, where it's located, it's name and so on. There is also the information of the users who rent bikes, their credit card information, email and so on. The data stored as the application is used builds the data model and an ER-diagram displays that model in a conceptual way. This kind of model helps designers understand the data which is captured by the application (entity) and how these data fit together (relationship). The data model behind these applications are often built around the relational data model which is a way to efficiently organize data. One way it does that is to normalize data into separate tables. For example a sales table, customer table and so on.
+At university, data modeling felt abstract. We studied ER diagrams, normal forms, cardinality, and keys such as primary and foreign keys. At the time, those ideas mostly lived on whiteboards and exam papers. In practice, they became much more concrete.
 
-![alt text](<Logical model bank application.jpeg>)
+If you design an application for bike rentals, food delivery, or a sports league, you are also designing a model of the world. Bikes, users, payments, deliveries, teams, and matches all become entities. Their connections become relationships. The application stores those entities and relationships in a way that lets the business operate.
 
-As data engineers we work with these systems and often have two important priorities. Integrating data from different systems to make a complete data foundation in enterprise environements as different departments and jobfunctions need different applications to support their specific area. Secondly transforming that data from the raw bytes produced in operational databases to something that yield value in the other end. This is a task the usually requires multiple steps often describes as ELT or ETL which can be compared to physical factories that produce finished goods from raw materials. The data modeling concepts behind operational database are very useful to those working on building analytical *databases* often called a data warehouse. The data warehouse is not a technology but a concept that describes the seperated data storage where data engineers do their work which for goods reasons is isolated from operational databases themselves. When data engineers move data into the data warehouse they benefit from understanding the data model behind the operational application as it makes it clear what kind of objects are related and where to find the information that has value in the other end of the pipeline. 
+The relational data model is one of the most common ways to do this. Data is separated into tables so it can be stored efficiently and updated consistently. Instead of repeating everything in one large table, we split the structure into tables such as customers, products, rentals, or sales.
 
-Data engineers use many of the same words when they speak about the data they work with, such as what the primary key is and how the tables are related with foreign keys. However there are some specific challenges which application designers need not to care about that much. For example data engineers are very often meeting questions on what kind of strategy to use when it comes to ingesting the data. In some cases it's only possible to ingest all the objects found in the source system while in others it's only possible to extract parts, often some time constraint is put on to reduce the load on the transactional database. 
+![Logical model of a bank application](<Logical model bank application.jpeg>)
 
-That leads to **puzzle 1**: Data engineers choose between full or incremental ingestion. 
+For a data engineer, understanding that source model matters. We usually work with systems built by application teams, and our job is not just to move data around. We need to understand what the data represents, how the tables relate, and which parts of the operational model matter for analytical use cases.
 
-Once data is ingested often in a landing zone in the data warehouse, the process of moving and transforming the data begins. This is where some of the next puzzles begins to appear. Most data pipelines flow in phases and it's become popular to use something called a *medallion architecture* which is a three-layed architecture often using the names bronze, silver and gold. In each of these phases we are going to face a lot of decisions. 
+That is where the work starts to become interesting. The language is familiar, but the constraints are different.
 
-This leasd to **puzzle 2**: Data engineers choose an architecture for data pipelines and what transformations happen in each.
+## Puzzle 1: Full or incremental ingestion?
 
-I really like Piet book *Designing Medallion Architecture's* and i advice anyone to read it. He makes a very interesting discussion about the kinds of choices that can be taken at each phase and provides some general guidelines for each as well as practical examples. At each layer we can decide to process the data in full or incrementally just as it is a question in the extraction phase. It's common to persist the raw data in the bronze layer as tables such as delta tables and performing very little transformations beyond that. The silver layer then is quite flexible but common transformations are column renamings, deduplications and trimming of payloads. Finally in the gold layer is where data is connected and where it's common to again speak about data modeling often with the *dimensional modeling* vocabolary that Ralph Kimball and other data warehouse pioneers invented. 
+One of the first recurring decisions in data engineering is how to ingest data from a source system.
 
-How should data be presented most elegantly and in a way that is most effective for whatever use case it supports? Dimensional modeling has for many decades been the gold standard of designing analytical data models, work pioneered in the early days of the data warehouse. 
+Sometimes the only realistic option is a full load. We extract every row every time because the source does not provide timestamps, change tracking, or reliable keys for detecting updates. In other systems, incremental ingestion is possible, and often necessary, because a full extraction would be too slow, too expensive, or too disruptive to the transactional system.
 
-A dimensional model builds on the concepts of the ER-diagram but have extended or modified the vocabolary for the unique challenges that exists in the area of data warehousing. 
+This is a technical choice, but it is also a modeling choice. To ingest data incrementally, we need to know what counts as a new row, an updated row, or a deleted row. That depends on understanding the source model well enough to define change over time.
 
-The notion of primary keys are still important to understand and can be used to merge incoming rows into an existing table, so that we can insert new and update existing rows. Foreign keys are used to bind data together in meaningful ways which results typically in a star schema. The star schema is the equivalent to the ER-diagram but represents enterprise data in *facts* and *dimensions*. A fact or dimension table are both tables but the important difference lies in what kinds of data it holds. When we ask questions of data we typically want to get an overview of some important stock that we measure, for example sales, customer satisfaction or inventory amount something we can measure numerically, we call that a fact. We add context to the question by including often descriptive perspectives such as sales across countries, customers or months. In this way we slice and dice the measures and together it forms a *multidimensional* cube, hence the name dimensional modeling. 
+This is the first puzzle: data engineers constantly choose between full and incremental ingestion, and the right answer depends on both system constraints and data semantics.
 
-![alt text](<DImensional cube of data.png>)
+## Puzzle 2: What should happen in each layer?
 
-The multidimensional cube above is a sketch that shows how this concept might be understood. 
+Once data has been ingested into the warehouse, the next puzzle appears: how should the pipeline be structured?
 
-One of the things that data engineers typically introduce are something called *surrogate keys*. These are self-constructed keys that like a primary uniquely defines a row in a table. The reason for this is that a primary key could contain text and be a composite of multiple columns. It's important that joins are efficient when browsing the multidimensional cube and having integers makes the operation much faster. The surrogate key was designed exactly for this purpose, something which is unique to the demands of analytical operations. 
+Many modern teams use some version of a medallion architecture with bronze, silver, and gold layers. The idea is simple, but the decisions inside each layer are not. Where should you deduplicate? When should you standardize naming? At what stage should business logic be introduced? Which transformations should be reversible, and which should be opinionated?
+
+I like Piethein Strengholt's book *Designing Medallion Architectures* because it makes this point well: the architecture is not valuable because it gives you three nice labels. It is valuable because it helps you separate concerns.
+
+In a typical setup, the bronze layer keeps raw data with minimal transformation. The silver layer refines that data through steps such as renaming columns, trimming payloads, applying light standardization, and removing duplicates. The gold layer is where data is shaped for consumption and connected into business-facing models.
+
+Even here, the same question keeps returning: should each step run as a full refresh or incrementally? The puzzle from ingestion does not disappear once data lands in the warehouse. It follows the data through the rest of the pipeline.
+
+## From ER diagrams to dimensional models
+
+When data reaches the point where it should support reporting, analysis, or decision-making, we often move from the vocabulary of ER diagrams to the vocabulary of dimensional modeling.
+
+Dimensional modeling is still about entities and relationships, but it is optimized for analytical use rather than transactional correctness. Instead of focusing on update efficiency for an application, it focuses on making questions easy to ask and answer.
+
+That usually means organizing data into facts and dimensions. Facts capture measurable events or states such as sales, inventory, revenue, or customer satisfaction. Dimensions provide the context for analyzing those facts, such as customer, country, date, or product.
+
+This structure produces what is often called a star schema. It is not the same as an ER diagram, but it serves a similar purpose: it gives us a model of how the data fits together. The difference is that the model is designed for analytical navigation rather than operational execution.
+
+![Dimensional cube of data](<DImensional cube of data.png>)
+
+The cube above is a simple sketch of that idea. We can look at one measure and slice it by different dimensions to answer business questions from multiple angles.
+
+## Why surrogate keys show up
+
+One concept that often surprises people the first time they work with a warehouse is the surrogate key.
+
+Source systems usually come with their own business keys or primary keys, but those are not always ideal in an analytical model. A key may be textual, composite, unstable, or expensive to join on repeatedly. In a warehouse, we often introduce surrogate keys so dimension rows can be identified with simple internal integers.
+
+That makes joins more efficient and gives us more control over how records evolve over time. It is one of those small design choices that looks artificial at first and then becomes obvious once you have worked with larger analytical models.
+
+## Closing thought
+
+This is what I find interesting about data engineering: it is full of decisions that look mechanical from a distance but turn out to be modeling decisions in disguise. Ingestion strategy, layer design, and dimensional structure are not just implementation details. They shape what questions the business can answer and how reliable those answers will be.
+
+In part 2, I want to continue with some of the later puzzles in the pipeline, especially around change handling, historical modeling, and how analytical tables evolve over time.
