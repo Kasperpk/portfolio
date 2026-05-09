@@ -60,6 +60,6 @@ That makes joins more efficient and gives us more control over how records evolv
 
 ## Closing thought
 
-This is what I find interesting about data engineering: it is full of decisions that look mechanical from a distance but turn out to be modeling decisions in disguise. Ingestion strategy, layer design, and dimensional structure are not just implementation details. They shape what questions the business can answer and how reliable those answers will be.
+Working as a data engineer there are many considerations when manufacturing data products. The ingestion strategy is often the very first one when it comes to implementation, then the layer design, and how it it might fit into a dimensional structure. These considerations shape what questions the business can answer and how reliable those answers will be.
 
 In part 2, I want to continue with some of the later puzzles in the pipeline, especially around change handling, historical modeling, and how analytical tables evolve over time.
