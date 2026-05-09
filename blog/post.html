@@ -84,13 +84,27 @@
         });
 
         const renderer = new marked.Renderer();
-        renderer.image = ({ href, title, text }) => {
+        renderer.image = (hrefOrToken, title, text) => {
+          const href = typeof hrefOrToken === 'object' && hrefOrToken !== null
+            ? hrefOrToken.href
+            : hrefOrToken;
+          const imageTitle = typeof hrefOrToken === 'object' && hrefOrToken !== null
+            ? hrefOrToken.title
+            : title;
+          const altText = typeof hrefOrToken === 'object' && hrefOrToken !== null
+            ? hrefOrToken.text
+            : text;
+
+          if (!href) {
+            return '';
+          }
+
           const isAbsolute = /^(?:[a-z]+:)?\/\//i.test(href);
           const src = isAbsolute || href.startsWith('posts/') || href.startsWith('/')
             ? href
             : `posts/${href}`;
-          const titleAttr = title ? ` title="${title}"` : '';
-          return `<img src="${src}" alt="${text}"${titleAttr}>`;
+          const titleAttr = imageTitle ? ` title="${imageTitle}"` : '';
+          return `<img src="${src}" alt="${altText || ''}"${titleAttr}>`;
         };
 
         const html = marked.parse(md, { renderer });
@@ -109,6 +123,7 @@
         document.querySelectorAll('pre code').forEach((el) => hljs.highlightElement(el));
 
       } catch (e) {
+        console.error('Failed to load post', e);
         container.innerHTML = '<p>Post not found.</p>';
       }
     }
