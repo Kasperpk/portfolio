@@ -1,5 +1,12 @@
 [
   {
+    "slug": "spark-versus-python",
+    "title": "When native Python beats a Spark cluster",
+    "date": "2026-05-19",
+    "description": "A Data Lab experiment: a small API pipeline ran 47% faster on a smaller machine without Spark — and why overhead, not data, should decide your engine.",
+    "file": "Spark versus Python"
+  },
+  {
     "slug": "to-prompt-or-not-to-prompt",
     "title": "To prompt or not to prompt",
     "date": "2026-05-13",
