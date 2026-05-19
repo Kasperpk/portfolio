@@ -4,6 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Post &mdash; Kasper Kærgaard Pedersen</title>
+  <!-- Social preview (defaults; refined per-post by JS below) -->
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="When native Python beats a Spark cluster — Kasper Kærgaard Pedersen" />
+  <meta property="og:description" content="A Data Lab experiment: a small API pipeline ran 47% faster on a smaller machine without Spark — and why overhead, not data, should decide your engine." />
+  <meta property="og:image" content="posts/spark-versus-python.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="When native Python beats a Spark cluster — Kasper Kærgaard Pedersen" />
+  <meta name="twitter:description" content="A Data Lab experiment: a small API pipeline ran 47% faster on a smaller machine without Spark — and why overhead, not data, should decide your engine." />
+  <meta name="twitter:image" content="posts/spark-versus-python.png" />
   <link rel="stylesheet" href="../style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -118,6 +127,23 @@
         // Update page title
         const h1 = container.querySelector('h1');
         if (h1) document.title = `${h1.textContent} — Kasper Kærgaard Pedersen`;
+
+        // Refine social preview tags for this post
+        if (meta) {
+          const setMeta = (selector, value) => {
+            const el = document.querySelector(selector);
+            if (el && value) el.setAttribute('content', value);
+          };
+          const fullTitle = `${meta.title} — Kasper Kærgaard Pedersen`;
+          setMeta('meta[property="og:title"]', fullTitle);
+          setMeta('meta[name="twitter:title"]', fullTitle);
+          setMeta('meta[property="og:description"]', meta.description);
+          setMeta('meta[name="twitter:description"]', meta.description);
+          if (meta.thumbnail) {
+            setMeta('meta[property="og:image"]', `posts/${meta.thumbnail}`);
+            setMeta('meta[name="twitter:image"]', `posts/${meta.thumbnail}`);
+          }
+        }
 
         // Run highlight.js on any code blocks marked didn't catch
         document.querySelectorAll('pre code').forEach((el) => hljs.highlightElement(el));

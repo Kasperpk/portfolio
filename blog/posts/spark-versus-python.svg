@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="Inter, 'Segoe UI', sans-serif">
+  <rect width="1200" height="630" fill="#111111"/>
+  <rect x="0.5" y="0.5" width="1199" height="629" fill="none" stroke="#2a2a2a"/>
+
+  <!-- eyebrow -->
+  <text x="80" y="122" font-family="'JetBrains Mono', monospace" font-size="22" letter-spacing="3" fill="#908d85">DATA LAB &#183; EXPERIMENT</text>
+
+  <!-- title -->
+  <text x="80" y="234" font-family="Lora, Georgia, serif" font-size="66" font-weight="600" fill="#e0ddd5">When native Python</text>
+  <text x="80" y="314" font-family="Lora, Georgia, serif" font-size="66" font-weight="600" fill="#e0ddd5">beats a Spark cluster</text>
+
+  <!-- comparison bars -->
+  <g font-family="'JetBrains Mono', monospace" font-size="24">
+    <!-- Spark -->
+    <text x="80" y="445" fill="#908d85">SPARK</text>
+    <rect x="240" y="424" width="660" height="34" rx="6" fill="#2a2a2a"/>
+    <rect x="240" y="424" width="660" height="34" rx="6" fill="#908d85"/>
+    <text x="924" y="445" fill="#908d85">4:00</text>
+    <!-- Python -->
+    <text x="80" y="525" fill="#e0ddd5">PYTHON</text>
+    <rect x="240" y="504" width="660" height="34" rx="6" fill="#2a2a2a"/>
+    <rect x="240" y="504" width="349" height="34" rx="6" fill="#e0ddd5"/>
+    <text x="613" y="525" fill="#e0ddd5">2:07</text>
+  </g>
+
+  <!-- footer -->
+  <text x="80" y="592" font-size="22" fill="#908d85">47% faster on a smaller machine</text>
+  <text x="1120" y="592" text-anchor="end" font-family="Lora, Georgia, serif" font-size="22" fill="#908d85">Analytical Mastery</text>
+</svg>
