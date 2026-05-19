@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="Inter, 'Segoe UI', sans-serif">
+  <rect width="1200" height="630" fill="#111111"/>
+  <rect x="0.5" y="0.5" width="1199" height="629" fill="none" stroke="#2a2a2a"/>
+
+  <!-- eyebrow -->
+  <text x="80" y="122" font-family="'JetBrains Mono', monospace" font-size="22" letter-spacing="3" fill="#908d85">DATA LAB &#183; ESSAY</text>
+
+  <!-- title -->
+  <text x="80" y="234" font-family="Lora, Georgia, serif" font-size="66" font-weight="600" fill="#e0ddd5">To prompt</text>
+  <text x="80" y="314" font-family="Lora, Georgia, serif" font-size="66" font-weight="600" fill="#e0ddd5">or not to prompt</text>
+
+  <!-- three cognitive systems -->
+  <line x1="80" y1="447" x2="1120" y2="447" stroke="#2a2a2a" stroke-width="2"/>
+  <g font-family="'JetBrains Mono', monospace">
+    <!-- System 1 -->
+    <rect x="80" y="415" width="320" height="64" rx="8" fill="#181818" stroke="#2a2a2a"/>
+    <text x="240" y="442" text-anchor="middle" font-size="22" fill="#908d85">SYSTEM 1</text>
+    <text x="240" y="464" text-anchor="middle" font-size="14" letter-spacing="1" fill="#5f5d57">FAST &#183; INTUITIVE</text>
+    <!-- System 2 -->
+    <rect x="440" y="415" width="320" height="64" rx="8" fill="#181818" stroke="#2a2a2a"/>
+    <text x="600" y="442" text-anchor="middle" font-size="22" fill="#908d85">SYSTEM 2</text>
+    <text x="600" y="464" text-anchor="middle" font-size="14" letter-spacing="1" fill="#5f5d57">SLOW &#183; DELIBERATE</text>
+    <!-- System 3 (the hook) -->
+    <rect x="800" y="415" width="320" height="64" rx="8" fill="#e0ddd5"/>
+    <text x="960" y="442" text-anchor="middle" font-size="22" font-weight="500" fill="#111111">SYSTEM 3</text>
+    <text x="960" y="464" text-anchor="middle" font-size="14" letter-spacing="1" fill="#3a3a3a">ARTIFICIAL &#183; EXTERNAL</text>
+  </g>
+
+  <!-- footer -->
+  <text x="80" y="592" font-size="22" fill="#908d85">Cognitive surrender vs. offloading</text>
+  <text x="1120" y="592" text-anchor="end" font-family="Lora, Georgia, serif" font-size="22" fill="#908d85">Analytical Mastery</text>
+</svg>
