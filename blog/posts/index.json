@@ -1,5 +1,13 @@
 [
   {
+    "slug": "the-edsel-of-data",
+    "title": "The Edsel of data",
+    "date": "2026-05-22",
+    "description": "Ford spent $400 million and still built a flop. The same risks exist in data. A reflection on humility in design — whether you're building cars, ketchup, or analytics.",
+    "file": "The Edsel of data",
+    "thumbnail": "the-edsel-of-data.svg"
+  },
+  {
     "slug": "spark-versus-python",
     "title": "When native Python beats a Spark cluster",
     "date": "2026-05-19",
