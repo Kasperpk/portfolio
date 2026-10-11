@@ -6,7 +6,7 @@
     "description": "A comprehensive guide to understanding why data creates value and how to build the systems that turn raw data into productive assets. Covers decision theory, systems thinking, data management, dimensional modeling, and a full walk-through of an enterprise data platform built on Microsoft Fabric.",
     "author": "Kasper Kærgaard Pedersen",
     "status": "In Progress",
-    "lastUpdated": "2026-05-01",
+    "lastUpdated": "2026-10-11",
     "coverColor": "#4a9e6f",
     "tags": ["Data Engineering", "Data Management", "Analytics", "Microsoft Fabric"],
     "lemonSqueezyUrl": "https://kasperbooks.lemonsqueezy.com/checkout/buy/34409d36-2a7a-4a4c-ac6d-da5f41e3f423",
@@ -14,35 +14,34 @@
       {
         "title": "The Value Proposition of Data",
         "chapters": [
-          { "slug": "introduction", "title": "Introduction to Decision Support Systems", "free": true },
-          { "slug": "case-studies-of-data-success", "title": "Case Studies of Data Success", "free": true },
-          { "slug": "decision-support", "title": "Decision Support", "free": true },
+          { "slug": "introduction", "title": "Introduction", "free": true },
+          { "slug": "decision-support", "title": "The Role of Information in a Decision", "free": true },
           { "slug": "the-role-of-information-in-a-system", "title": "The Role of Information in a System", "free": true },
-          { "slug": "technological-advancement", "title": "Technological Advancement", "free": true },
+          { "slug": "technological-advancement", "title": "How the Value of Data and Information Has Compounded", "free": true },
           { "slug": "summary-part-1", "title": "Summary", "free": true }
         ]
       },
       {
         "title": "Running and Managing Businesses with Data",
         "chapters": [
-          { "slug": "business-systems-and-data-driven-operating-model", "title": "The Business Systems and the Data-Driven Operating Model", "free": false },
-          { "slug": "finding-requirements-and-use-cases", "title": "Finding Requirements and Use Cases", "free": true },
+          { "slug": "business-systems-and-data-driven-operating-model", "title": "The Data-Driven Operating Model", "free": false },
+          { "slug": "finding-requirements-and-use-cases", "title": "Finding Ways to Activate Data Value", "free": true },
           { "slug": "a-word-on-data-management", "title": "A Word on Data Management", "free": false },
-          { "slug": "data-cultures-and-organizational-empowerment", "title": "Data Cultures and Organizational Empowerment", "free": false }
+          { "slug": "data-cultures-and-organizational-empowerment", "title": "The Right People and Culture", "free": false }
         ]
       },
       {
         "title": "Manufacturing Knowledge and Data-Centric Products",
         "chapters": [
           { "slug": "data-lifecycles", "title": "Data Lifecycles", "free": false },
-          { "slug": "from-lifecycles-to-factories", "title": "From Lifecycles to Factories", "free": false },
+          { "slug": "from-lifecycles-to-factories", "title": "From Single Lifecycles to Enterprise Data Factories", "free": false },
           { "slug": "manufacturing-knowledge-and-data-products", "title": "Manufacturing Knowledge and Data-Centered Products", "free": false }
         ]
       },
       {
         "title": "What to Do Now",
         "chapters": [
-          { "slug": "becoming-data-literate", "title": "Becoming Data Literate", "free": false },
+          { "slug": "becoming-data-literate", "title": "Learn About Business and Data", "free": false },
           { "slug": "more-data-success-stories", "title": "More Data Success Stories", "free": false },
           { "slug": "time-to-practice", "title": "Time to Practice and Gain Technical Knowledge", "free": false },
           { "slug": "conclusions", "title": "Conclusions", "free": false }
