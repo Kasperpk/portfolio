@@ -131,35 +131,29 @@
 
     function renderEmbeddedReference(target, alias, bookSlug) {
       const cleanTarget = target.trim();
-      const displayLabel = prettifyReferenceLabel(alias || cleanTarget);
+      // Obsidian uses the alias slot for alignment hints and sizes (|center, |400, |400x300); those are not captions.
+      const aliasText = (alias || '').trim();
+      const isLayoutHint = /^(center|centre|left|right|\d+(x\d+)?)$/i.test(aliasText);
+      const displayLabel = prettifyReferenceLabel(isLayoutHint || !aliasText ? cleanTarget : aliasText);
       const fileName = decodeURIComponent(cleanTarget.split('/').pop().trim());
       const hasImageExtension = /\.(png|jpe?g|gif|webp|svg)$/i.test(fileName);
+      const label = escapeHtml(displayLabel);
 
+      // Emitted on a single line with no indentation: Markdown treats lines indented 4+ spaces
+      // after a blank line as an indented code block, which would print this HTML as code.
       if (hasImageExtension) {
         const src = `${bookSlug}/assets/${encodeURIComponent(fileName)}`;
-        return `
-          <figure class="obsidian-embed obsidian-asset">
-            <div class="obsidian-embed-label">Embedded figure</div>
-            <img src="${src}" alt="${escapeHtml(displayLabel)}" loading="lazy" onerror="this.closest('figure').classList.add('is-missing'); this.remove();" />
-            <figcaption>${escapeHtml(displayLabel)}</figcaption>
-          </figure>
-        `;
+        return `<figure class="obsidian-embed obsidian-asset"><div class="obsidian-embed-label">Embedded figure</div><img src="${src}" alt="${label}" loading="lazy" onerror="this.closest('figure').classList.add('is-missing'); this.remove();" /><figcaption>${label}</figcaption></figure>`;
       }
 
-      return `
-        <figure class="obsidian-embed obsidian-asset is-pending" data-asset-base="${escapeHtml(fileName)}" data-book="${escapeHtml(bookSlug)}">
-          <div class="obsidian-embed-label">Embedded reference</div>
-          <img alt="${escapeHtml(displayLabel)}" loading="lazy" />
-          <figcaption>${escapeHtml(displayLabel)}</figcaption>
-        </figure>
-      `;
+      return `<figure class="obsidian-embed obsidian-asset is-pending" data-asset-base="${escapeHtml(fileName)}" data-book="${escapeHtml(bookSlug)}"><div class="obsidian-embed-label">Embedded reference</div><img alt="${label}" loading="lazy" /><figcaption>${label}</figcaption></figure>`;
     }
 
     function normalizeObsidianMarkdown(md, bookSlug) {
       return md
         .replace(/^---[\s\S]*?---\n*/m, '')
         .replace(/%%[\s\S]*?%%/g, '')
-        .replace(/!\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, target, alias) => renderEmbeddedReference(target, alias, bookSlug))
+        .replace(/!\[\[([^\]|]+)(?:\|([^\]]*))?\]\]/g, (_, target, alias) => renderEmbeddedReference(target, alias, bookSlug))
         .replace(/!\[([^\]]*)\]\((?!https?:|data:|\/)([^)]+)\)/g, (_, alt, src) => {
           const cleanSrc = decodeURIComponent(src.trim().replace(/^\.?\//, ''));
           const fileName = cleanSrc.split('/').pop();
